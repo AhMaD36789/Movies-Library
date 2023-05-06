@@ -1,0 +1,7 @@
+DROP TABLE IF EXISTS movieList;
+
+CREATE TABLE IF NOT EXISTS movieList (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(50),
+    comments VARCHAR(255)
+);
