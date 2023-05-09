@@ -13,13 +13,61 @@ server.use(express.json());
 const client = new pg.Client(process.env.databaseURL)
 
 server.get('/', homeHandler)
-server.get('/getmovie', getFavoriteHandler)
+server.get('/getmovies', getFavoriteHandler)
 server.post('/addmovie', postFavoriteHandler)
 server.get('/trending', trendingHandler)
 server.get('/search', searchHandler)
 server.get('/list', listHandler)
 server.get('/discover', discoverHandler)
+server.put('/Update/:id',updateHandler)
+server.delete('/Delete/:id',deleteHandler)
+server.get('/getmoviebyid', getbyidHandler)
 server.use(errorHandler)
+
+function updateHandler (req,res){
+const {id} = req.params;
+const {title,comments} = req.body;
+const sql = `UPDATE movieList 
+SET title=$1, comments=$2
+WHERE id=${id};
+`
+const arr=[title,comments];
+client.query(sql,arr)
+.then(data=>{
+    res.send(data.rows);
+    res.status(202);
+})
+.catch((error)=>{
+    errorHandler(error,req,res,next);
+});
+}
+
+function deleteHandler (req,res){
+    const {id} = req.params;
+    const sql = `DELETE FROM movieList
+    WHERE id=${id};
+    `
+    client.query(sql)
+    .then(data=>{
+        res.send(data.rows);
+        res.status(202);
+    })
+    .catch((error)=>{
+        errorHandler(error,req,res,next)
+    });
+}
+
+function getbyidHandler (req,res){
+    const id = req.query.id;
+    const sql = `SELECT * FROM movielist WHERE id=${id};`;
+    client.query(sql)
+    .then(data=>{
+        res.send(data.rows)
+    })
+    .catch((error)=>{
+        errorHandler(error,req,res)
+    })
+}
 
 function homeHandler(req, res) {
     const returnVal = {

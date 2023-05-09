@@ -1,10 +1,10 @@
-# Movies-Library - V1.0.1
+# Movies-Library - V1.0.2
 
 **Author Name**: Ahmad Harhsheh
 
 ## WRRC
 
-![Alt text](/Resources/Screenshot%202023-05-03%20112811.png )
+![Alt text](/Resources/Screenshot%202023-05-09%20174338.png)
 
 ## Overview
 
@@ -31,3 +31,13 @@ search=> displays a search feature for a movie of your choosing.
 list=> displays a list of movies within a specific genre.
 
 discover=> displays a random assortment of movies alongside some of our recommendations.
+
+addmovie=>add movies to favorite list
+
+getmovie=>get movies added to favorite list
+
+update=>update value of an existing movie
+
+delete=>delete a movie from DB
+
+getmoviebyid=>get a movie by its id in database
