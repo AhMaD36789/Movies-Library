@@ -1,12 +1,14 @@
 
 const express = require('express');
 const server = express();
-const data = require('./Movie data/data.json');
-const PORT = process.env.PORT || 3000;
+//const data = require('./Movie data/data.json');
+//process.env.PORT ||
+const PORT =  3001;
 const cors = require('cors');
+server.use(cors());
 require('dotenv').config();
 const axios = require('axios');
-const movieData = require('./Movie data/data.json');
+//const movieData = require('./Movie data/data.json');
 const pg = require('pg');
 const apikey = process.env.apikey;
 server.use(express.json());
@@ -26,16 +28,22 @@ server.use(errorHandler)
 
 function updateHandler (req,res){
 const {id} = req.params;
-const {title,comments} = req.body;
+const updatedmovie = req.body;
 const sql = `UPDATE movieList 
-SET title=$1, comments=$2
-WHERE id=${id};
-`
-const arr=[title,comments];
+SET title=$1, release_date=$2, poster_path=$3, overview=$4, comments=$5
+WHERE id=${id} RETURNING *;`
+
+const arr=[updatedmovie.title,updatedmovie.release_date,updatedmovie.poster_path,updatedmovie.overview,updatedmovie.comments];
 client.query(sql,arr)
 .then(data=>{
-    res.send(data.rows);
-    res.status(202);
+    const sql = `SELECT * FROM movieList;`
+    client.query(sql)
+    .then(alldata=>{
+        res.send(alldata)
+        })
+        .catch(error=>{
+            errorHandler(error, req , res,next)
+            })
 })
 .catch((error)=>{
     errorHandler(error,req,res,next);
@@ -45,8 +53,8 @@ client.query(sql,arr)
 function deleteHandler (req,res){
     const {id} = req.params;
     const sql = `DELETE FROM movieList
-    WHERE id=${id};
-    `
+    WHERE id=${id};`
+    
     client.query(sql)
     .then(data=>{
         res.send(data.rows);
@@ -117,8 +125,8 @@ function getFavoriteHandler(req, res) {
 
 function postFavoriteHandler(req, res) {
     const movies = req.body;
-    const sql = `INSERT INTO movielist (title,comments) VALUES ($1,$2)`;
-    const value = [movies.title, movies.comments];
+    const sql = `INSERT INTO movielist (title,release_date,poster_path,overview,comments) VALUES ($1,$2,$3,$4,$5)`;
+    const value = [movies.title,movies.release_date,movies.poster_path,movies.overview,movies.comments];
     client.query(sql, value)
         .then(data => {
             res.send("Data added sucessfully");
@@ -220,6 +228,6 @@ function errorHandler(error, req, res, next) {
 client.connect()
     .then(() => {
         server.listen(PORT, () => {
-
+            console.log(PORT)
         });
     });
