@@ -39,14 +39,14 @@ client.query(sql,arr)
     const sql = `SELECT * FROM movieList;`
     client.query(sql)
     .then(alldata=>{
-        res.send(alldata)
+        res.send(alldata.rows)
         })
         .catch(error=>{
-            errorHandler(error, req , res,next)
+            errorHandler(error, req , res)
             })
 })
 .catch((error)=>{
-    errorHandler(error,req,res,next);
+    errorHandler(error,req,res);
 });
 }
 
@@ -57,11 +57,18 @@ function deleteHandler (req,res){
     
     client.query(sql)
     .then(data=>{
-        res.send(data.rows);
-        res.status(202);
+        const sql = `SELECT * FROM movieList;`
+    client.query(sql)
+    .then(alldata=>{
+        res.send(alldata.rows)
+        })
+        .catch(error=>{
+            errorHandler(error, req , res)
+            })
+
     })
     .catch((error)=>{
-        errorHandler(error,req,res,next)
+        errorHandler(error,req,res)
     });
 }
 
@@ -106,7 +113,7 @@ function trendingHandler(req, res) {
 
     }
     catch (error) {
-        errorHandler(error, req, res, next)
+        errorHandler(error, req, res)
     }
 
 
@@ -119,7 +126,7 @@ function getFavoriteHandler(req, res) {
             res.send(data.rows);
         })
         .catch((error) => {
-            errorHandler(error, req, res, next)
+            errorHandler(error, req, res)
         })
 }
 
@@ -132,7 +139,7 @@ function postFavoriteHandler(req, res) {
             res.send("Data added sucessfully");
         })
         .catch(error=>{
-            errorHandler(error,req,res,next)
+            errorHandler(error,req,res)
         })
 }
 
@@ -157,7 +164,7 @@ function searchHandler(req, res) {
 
     }
     catch (error) {
-        errorHandler(error, req, res, next)
+        errorHandler(error, req, res)
     }
 
 
@@ -182,7 +189,7 @@ function listHandler(req, res) {
 
     }
     catch (error) {
-        errorHandler(error, req, res, next)
+        errorHandler(error, req, res)
     }
 }
 
@@ -205,7 +212,7 @@ function discoverHandler(req, res) {
 
     }
     catch (error) {
-        errorHandler(error, req, res, next)
+        errorHandler(error, req, res)
     }
 }
 
@@ -217,7 +224,7 @@ function Movie(id, title, release_date, poster_path, overview) {
     this.overview = overview;
 }
 
-function errorHandler(error, req, res, next) {
+function errorHandler(error, req, res) {
     const err = {
         status: 500,
         message: error
