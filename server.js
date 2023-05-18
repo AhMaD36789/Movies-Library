@@ -87,8 +87,9 @@ function getbyidHandler (req,res){
 function homeHandler(req, res) {
     const returnVal = {
         title: data.title,
+        release_date: data.release_date,
         poster_path: data.poster_path,
-        overview: data.overview,
+        overview: data.overview
     }
     res.send(returnVal)
 }
