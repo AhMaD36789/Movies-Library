@@ -85,7 +85,7 @@ function getbyidHandler (req,res){
 }
 
 function homeHandler(req, res) {
-    res.send("bitch")
+    res.send("")
 }
 
 function trendingHandler(req, res) {
